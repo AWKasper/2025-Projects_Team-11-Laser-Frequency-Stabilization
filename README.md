@@ -4,7 +4,7 @@ Omgeving voor Laser Frequency Stabilization voor Project Natuur- &amp; Sterrenku
 # Team members:
  - Abe Kasper
  - Leo Willems
- - Rico Koster
+ - Rico Koster - Notulist
  - Wouter Groot
 
 # Project Goals
