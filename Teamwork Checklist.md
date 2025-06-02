@@ -18,7 +18,7 @@
 # Read rubrics: Yes
 
 # What to learn: 
-Is het leuk om onderzoek te doen, behavlt experimenteel onderzoek ons?
+Is het leuk om onderzoek te doen, bevalt experimenteel onderzoek ons? Hoe is het vergeleken met wat we tot nu toe gehoord hebben/verwachtingen?
 
 # Questions supervisor:
   - Wat is het schema/ wat is de beschikbaardheid?
