@@ -39,4 +39,4 @@ X
 ## Friday
 9:00-15:00     6u 
 # Total lab time
-
+81.5 u
