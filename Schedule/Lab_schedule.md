@@ -33,10 +33,10 @@ X
 ## Tuesday
 X
 ## Wednesday
-9:00-17:00.    8u
+11:00-17:00.    8u
 ## Thrusday
 9:00-17:00     8u
 ## Friday
-9:00-15:00     6u 
+9:00-17:00     6u 
 # Total lab time
 81.5 u
