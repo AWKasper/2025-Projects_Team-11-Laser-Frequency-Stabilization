@@ -38,4 +38,5 @@
 
 ## Friday
 
+# Total lab time
 
