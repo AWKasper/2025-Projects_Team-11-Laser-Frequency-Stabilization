@@ -19,9 +19,9 @@ X
 ## Monday
 X
 ## Tuesday
-9:00-17:00.    8u 
-## Wednesday 
 X
+## Wednesday 
+9:00-17:00.    8u 
 ## Thursday
 11:00-17:00.   6u 
 ## Friday
@@ -31,9 +31,9 @@ X
 ## Monday
 9:00-17:00.    8u
 ## Tuesday
-9:00-17:00.    8u
-## Wednesday
 X
+## Wednesday
+9:00-17:00.    8u
 ## Thrusday
 9:00-17:00     8u
 ## Friday
