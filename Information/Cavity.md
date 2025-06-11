@@ -26,9 +26,9 @@ This image shows the possible stable setups and how they look in a cavity.
 
 For cavities we also have two parameters: Finesse and FSR (Free spectral range)
 
-We can calculate the Finesse with just the reflection coefficient of the mirror ![formula](https://www.rp-photonics.com/finesse.html)
+We can calculate the Finesse with just the reflection coefficient of the mirror [formula](https://www.rp-photonics.com/finesse.html)
 
-We can calculate the Free spectral range with only the length of the cavity ![formula](https://www.rp-photonics.com/free_spectral_range.html)
+We can calculate the Free spectral range with only the length of the cavity [formula](https://www.rp-photonics.com/free_spectral_range.html)
 
 (Why do we care about the finesse and the FSR? It tells us things about about our transimissivity peaks, a way to tell when you are in resonance, we want these to be spaced apart and thin. High finesse makes the transmissivity peaks thinner, and a high FSR makes them further apart.)
 
