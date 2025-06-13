@@ -6,7 +6,8 @@ class GaussianBeamLenses(Scene):
     """
     A Manim scene that visualizes a Gaussian beam propagating between two lenses.
     The beam has its minimum waist exactly in the center of the optical system.
-    This version uses taller lenses and a wider beam to better fill the vertical space.
+    This modified version shows the phase of the sine wave changing inside a rectangle
+    placed at the beam waist, with a smooth transition.
     """
 
     # This function creates a biconvex lens VGroup, making the code cleaner.
@@ -25,9 +26,8 @@ class GaussianBeamLenses(Scene):
     def construct(self):
         # --- BEAM PARAMETERS AND FUNCTION ---
         # These parameters define the shape and divergence of the beam.
-        # Increased beam waist (w0) to make the beam thicker
-        w0 = 0.4
-        zR = 3.0  # Rayleigh range (adjusted for the shorter distance)
+        w0 = 0.4  # Beam waist at z=0
+        zR = 3.0  # Rayleigh range
 
         # Function defining the beam radius w(z) along the propagation axis (z).
         def beam_waist(z):
@@ -35,12 +35,13 @@ class GaussianBeamLenses(Scene):
 
         # --- OPTICAL ELEMENTS ---
         # The distance for the lenses and beam
-        distance = 4.0
+        distance = 2 * np.pi
+        z_range = [-distance, distance]
 
         # A dashed line representing the central optical axis
         center_line = DashedLine(
-            start=LEFT * (distance + 0.5),
-            end=RIGHT * (distance + 0.5),
+            start=LEFT * distance,
+            end=RIGHT * distance,
             color=WHITE,
             stroke_opacity=0.7,
         )
@@ -50,9 +51,6 @@ class GaussianBeamLenses(Scene):
         lens2 = self.create_lens().move_to(RIGHT * distance)
 
         # --- BEAM PROFILE ---
-        # The z-range over which the beam is drawn, matching the lens distance
-        z_range = [-distance, distance]
-
         # The top envelope of the beam
         top_beam = ParametricFunction(
             lambda z: [z, beam_waist(z), 0],
@@ -76,14 +74,76 @@ class GaussianBeamLenses(Scene):
             fill_opacity=0.4
         )
 
-        # --- ANIMATION SEQUENCE ---
-        self.play(FadeIn(lens1, scale=0.8), FadeIn(lens2, scale=0.8))
-
-        # Animate the creation of the beam
-        self.play(
-            Create(center_line), Create(top_beam), Create(bottom_beam), run_time=2
+        # --- RECTANGLE (THE "MEDIUM") ---
+        rectangle = Rectangle(
+            color=DARK_BLUE,
+            width=12 * w0,
+            height=6 * w0,
+            fill_color=DARK_BLUE,
+            fill_opacity=0.4,
         )
-        self.play(FadeIn(beam_fill), run_time=1.5)
+        rectangle.move_to(ORIGIN)
 
-        # Hold the final scene
-        self.wait(1)
+        # --- CONTINUOUS SINE WAVE (IN ONE PART) ---
+        # Define the boundaries of the rectangle
+        rect_width = rectangle.width
+        rect_left_x = -rect_width / 2
+        rect_right_x = rect_width / 2
+
+        # Calculate the constant phase offset for the section after the rectangle
+        # to ensure the function is continuous at the boundary.
+        final_phase_offset = np.sin(rect_right_x * 5)
+
+        # Define the phase modulation function using np.where for vectorization.
+        # This function applies the phase change only within and after the rectangle.
+        def phase_modulation(t):
+            # Phase is np.sin(t * 5) inside the rectangle
+            phase_inside = np.sin(t * 5)
+
+            # After the rectangle, the phase is held constant at its final value
+            # to maintain continuity of the wave.
+            phase_after = final_phase_offset
+
+            # Before the rectangle, the phase offset is 0.
+            phase_before = 0
+
+            # Use nested np.where to create a single vectorized function
+            # that implements the piecewise logic.
+            return np.where(
+                t > rect_right_x,
+                phase_after,
+                np.where(t >= rect_left_x, phase_inside, phase_before),
+            )
+
+        # Create a single ParametricFunction for the entire sine wave.
+        sine_function = ParametricFunction(
+            lambda t: np.array(
+                [t, beam_waist(t) * np.sin(t * 5 + phase_modulation(t)), 0]
+            ),
+            t_range=[z_range[0], z_range[1], 0.1],
+            color="#8B0000",
+            stroke_width=4,
+        )
+
+        # --- ANIMATION SEQUENCE ---
+        # Fade in the optical elements
+        self.play(
+            FadeIn(lens1, scale=0.8),
+            FadeIn(lens2, scale=0.8),
+            FadeIn(rectangle, scale=0.8),
+        )
+
+        # Animate the creation of the beam envelope
+        self.play(
+            Create(center_line),
+            FadeIn(beam_fill),
+            Create(top_beam),
+            Create(bottom_beam),
+            run_time=2,
+        )
+
+        # Animate the creation of the single, continuous sine wave.
+        self.play(Create(sine_function), run_time=3)
+
+        # Hold the final scene for a moment
+        self.wait(2)

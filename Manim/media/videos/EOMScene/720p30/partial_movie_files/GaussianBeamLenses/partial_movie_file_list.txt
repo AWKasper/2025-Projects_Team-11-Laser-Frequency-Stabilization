@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamLenses/2016333726_1493476920_223132457.mp4'
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamLenses/543634251_1826449209_1271335494.mp4'
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamLenses/543634251_277763999_2989255400.mp4'
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamLenses/543634251_4217992463_303256889.mp4'
