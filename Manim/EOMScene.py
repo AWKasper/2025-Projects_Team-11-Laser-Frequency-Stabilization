@@ -1,19 +1,20 @@
 from manim import *
 import numpy as np
 
+
 class GaussianBeamLenses(Scene):
     """
     A Manim scene that visualizes a Gaussian beam propagating between two lenses.
     The beam has its minimum waist exactly in the center of the optical system.
-    This version refactors lens creation into a function and uses a more compact layout.
+    This version uses taller lenses and a wider beam to better fill the vertical space.
     """
 
-    # --- HELPER FUNCTION TO CREATE A LENS ---
     # This function creates a biconvex lens VGroup, making the code cleaner.
     def create_lens(self, lens_color=BLUE, fill_opacity=0.4):
-        """Creates a biconvex lens Mobject."""
-        p_top = [0, 0.8, 0]    # Top point of the lens
-        p_bottom = [0, -0.8, 0]  # Bottom point of the lens
+        """Creates a taller biconvex lens Mobject."""
+        # Increased y-values to make the lens taller
+        p_top = [0, 1.8, 0]
+        p_bottom = [0, -1.8, 0]
         # Right arc of the lens
         arc1 = ArcBetweenPoints(p_top, p_bottom, angle=-PI / 2, color=lens_color)
         # Left arc of the lens
@@ -22,10 +23,10 @@ class GaussianBeamLenses(Scene):
         return lens_shape
 
     def construct(self):
-
         # --- BEAM PARAMETERS AND FUNCTION ---
         # These parameters define the shape and divergence of the beam.
-        w0 = 0.1  # Beam waist (minimum radius) at z=0
+        # Increased beam waist (w0) to make the beam thicker
+        w0 = 0.4
         zR = 3.0  # Rayleigh range (adjusted for the shorter distance)
 
         # Function defining the beam radius w(z) along the propagation axis (z).
@@ -33,15 +34,15 @@ class GaussianBeamLenses(Scene):
             return w0 * np.sqrt(1 + (z / zR) ** 2)
 
         # --- OPTICAL ELEMENTS ---
-        # The new, shorter distance for the lenses and beam
+        # The distance for the lenses and beam
         distance = 4.0
-        
+
         # A dashed line representing the central optical axis
         center_line = DashedLine(
-            start=LEFT * (distance + 0.5), 
-            end=RIGHT * (distance + 0.5), 
-            color=WHITE, 
-            stroke_opacity=0.7
+            start=LEFT * (distance + 0.5),
+            end=RIGHT * (distance + 0.5),
+            color=WHITE,
+            stroke_opacity=0.7,
         )
 
         # Create lenses using the helper function
@@ -51,7 +52,7 @@ class GaussianBeamLenses(Scene):
         # --- BEAM PROFILE ---
         # The z-range over which the beam is drawn, matching the lens distance
         z_range = [-distance, distance]
-        
+
         # The top envelope of the beam
         top_beam = ParametricFunction(
             lambda z: [z, beam_waist(z), 0],
@@ -64,7 +65,7 @@ class GaussianBeamLenses(Scene):
             t_range=[z_range[0], z_range[1], 0.1],
             color=RED,
         )
-        
+
         # Create a Polygon to fill the space between the top and bottom envelopes
         beam_points_top = top_beam.get_points()
         beam_points_bottom = bottom_beam.get_points()
@@ -77,15 +78,12 @@ class GaussianBeamLenses(Scene):
 
         # --- ANIMATION SEQUENCE ---
         self.play(FadeIn(lens1, scale=0.8), FadeIn(lens2, scale=0.8))
-        
+
         # Animate the creation of the beam
         self.play(
-            Create(center_line),
-            Create(top_beam),
-            Create(bottom_beam),
-            run_time=2
+            Create(center_line), Create(top_beam), Create(bottom_beam), run_time=2
         )
         self.play(FadeIn(beam_fill), run_time=1.5)
 
         # Hold the final scene
-        self.wait(3)
+        self.wait(1)
