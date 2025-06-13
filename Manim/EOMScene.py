@@ -1,55 +1,55 @@
 from manim import *
 from manim_physics import *
-import numpy as np
 
-class GaussianRayExampleScene(Scene):
+
+class AnimatedRayExampleScene(Scene):
     def construct(self):
         # Define the style for the lenses
-        lens_style = {"fill_opacity": 0.5, "color": BLUE}
+        lens_style = {"fill_opacity": 0.25, "color": BLUE, "stroke_width": 2}
 
         # Create the two lenses
-        lens1 = Lens(-5, 1, **lens_style).shift(LEFT)
-        lens2 = Lens(5, 1, **lens_style).shift(RIGHT)
-
-        # --- MODIFIED SECTION ---
-        # Parameters for the Gaussian beam simulation
-        num_rays = 150  # Increased number of rays for a denser look
-        beam_center = 0.0  # Center of the beam in the y-axis
-        beam_width_std_dev = 0.75 # Standard deviation, controls the "width" of the beam
-
-        # Generate starting y-positions from a Gaussian distribution
-        ray_y_positions = np.random.normal(loc=beam_center, scale=beam_width_std_dev, size=num_rays)
-
-        # Create a list of Ray objects with varying opacity to simulate a Gaussian intensity profile
-        rays = []
-        for y_pos in ray_y_positions:
-            # Calculate opacity based on the Gaussian probability density function.
-            # Rays closer to the center (y_pos ≈ beam_center) will have higher opacity.
-            distance_from_center = abs(y_pos - beam_center)
-            opacity = np.exp(-0.5 * (distance_from_center / beam_width_std_dev)**2)
-            
-            ray = Ray(
-                start=LEFT * 5 + UP * y_pos,
-                direction=RIGHT,
-                init_length=5,
-                propagate=[lens1, lens2],
-                color=RED,
-                stroke_width=1.5,
-                stroke_opacity=opacity # Apply the calculated opacity
-            )
-            rays.append(ray)
-        # --- END OF MODIFICATION ---
+        lens1 = Lens(-5, 1, **lens_style).shift(LEFT * 4)
+        lens2 = Lens(5, 1, **lens_style).shift(RIGHT * 4)
 
         # Instantly add the static lenses to the scene
         self.add(lens1, lens2)
 
-        # Animate the creation of each ray simultaneously
-        self.play(
-            AnimationGroup(
-                *[Create(ray) for ray in rays],
-                lag_ratio=0.0,
-                run_time=2 # Slightly longer animation for a smoother effect
-            )
+        # --- Gaussian Beam Definition ---
+
+        # Parameters for the Gaussian beam
+        w0 = 0.1  # Beam waist (minimum radius)
+        zR = 8  # Rayleigh range (controls divergence)
+
+        # Function defining the beam waist w(z) along the propagation axis
+        def beam_waist(z):
+            return w0 * np.sqrt(1 + (z / zR) ** 2)
+
+        # Create the top and bottom envelopes of the beam using ParametricFunction
+        # The function takes a parameter 't' (which we use as the z-axis)
+        # and returns a point [t, y(t), 0]
+        top_beam = ParametricFunction(
+            lambda z: [z, beam_waist(z), 0],
+            t_range=[-7, 7, 0.1],  # t_range is [start, end, step]
+            color=RED,
         )
 
-        self.wait(2)
+        bottom_beam = ParametricFunction(
+            lambda z: [z, -beam_waist(z), 0],
+            t_range=[-7, 7, 0.1],
+            color=RED,
+        )
+
+        # A center line for the beam
+        center_line = DashedLine(
+            start=LEFT * 7, end=RIGHT * 7, color=RED, stroke_opacity=0.5
+        )
+
+        # Animate the creation of the beam
+        # We use Create to draw the Mobjects from left to right
+        self.play(
+            Create(top_beam, run_time=3),
+            Create(bottom_beam, run_time=3),
+            Create(center_line, run_time=3),
+        )
+
+        self.wait(1)  # Hold the final frame for a moment

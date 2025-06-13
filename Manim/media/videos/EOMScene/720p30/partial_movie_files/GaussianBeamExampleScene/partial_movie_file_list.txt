@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamExampleScene/2016333726_1376065219_3503272281.mp4'
+file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/GaussianBeamExampleScene/543634251_2844360058_3565755611.mp4'
