@@ -1,6 +1,22 @@
 # Project-NS1-Laser-Frequency-Stabilization
 Omgeving voor Laser Frequency Stabilization voor Project Natuur- &amp; Sterrenkunde
 
+# Render animations
+For preview run following commands from Manim folder (cd Manim):
+```
+manim --quality m -p your_scene.py YourSceneName
+```
+
+Final render:
+```
+manim --quality k -p your_scene.py YourSceneName
+```
+
+Example:
+```
+manim --quality m -p main.py CreateCircle
+```
+
 # Team members:
  - Abe Kasper
  - Leo Willems
