@@ -6,8 +6,8 @@ class GaussianBeamLenses(Scene):
     """
     A Manim scene that visualizes a Gaussian beam propagating between two lenses.
     The beam has its minimum waist exactly in the center of the optical system.
-    This modified version shows the phase of the sine wave changing inside a rectangle
-    placed at the beam waist, with a smooth transition.
+    This modified version shows the phase of the sine wave changing continuously
+    after it enters a region marked by a rectangle.
     """
 
     # This function creates a biconvex lens VGroup, making the code cleaner.
@@ -73,8 +73,8 @@ class GaussianBeamLenses(Scene):
             fill_color=RED,
             fill_opacity=0.4
         )
-
-        # --- RECTANGLE (THE "MEDIUM") ---
+        
+        # --- RECTANGLE (MARKS THE START OF THE MEDIUM) ---
         rectangle = Rectangle(
             color=DARK_BLUE,
             width=12 * w0,
@@ -85,41 +85,25 @@ class GaussianBeamLenses(Scene):
         rectangle.move_to(ORIGIN)
 
         # --- CONTINUOUS SINE WAVE (IN ONE PART) ---
-        # Define the boundaries of the rectangle
-        rect_width = rectangle.width
-        rect_left_x = -rect_width / 2
-        rect_right_x = rect_width / 2
-
-        # Calculate the constant phase offset for the section after the rectangle
-        # to ensure the function is continuous at the boundary.
-        final_phase_offset = np.sin(rect_right_x * 5)
+        # Define the boundary where the phase modulation begins
+        rect_left_x = -rectangle.width / 2
 
         # Define the phase modulation function using np.where for vectorization.
-        # This function applies the phase change only within and after the rectangle.
+        # This function "turns on" the phase change at the boundary and continues it.
         def phase_modulation(t):
-            # Phase is np.sin(t * 5) inside the rectangle
-            phase_inside = np.sin(t * 5)
-
-            # After the rectangle, the phase is held constant at its final value
-            # to maintain continuity of the wave.
-            phase_after = final_phase_offset
-
-            # Before the rectangle, the phase offset is 0.
-            phase_before = 0
-
-            # Use nested np.where to create a single vectorized function
-            # that implements the piecewise logic.
-            return np.where(
-                t > rect_right_x,
-                phase_after,
-                np.where(t >= rect_left_x, phase_inside, phase_before),
-            )
+            # The phase modulation starts at the left edge of the rectangle.
+            # To ensure continuity, we subtract the value of the modulation
+            # at the starting point, so it smoothly grows from zero.
+            start_phase_offset = np.sin(rect_left_x * 50e6)
+            
+            # Apply modulation only for t >= rect_left_x
+            return np.where(t >= rect_left_x, 
+                            np.sin(t * 5) - start_phase_offset, 
+                            0)
 
         # Create a single ParametricFunction for the entire sine wave.
         sine_function = ParametricFunction(
-            lambda t: np.array(
-                [t, beam_waist(t) * np.sin(t * 5 + phase_modulation(t)), 0]
-            ),
+            lambda t: np.array([t, beam_waist(t) * np.sin(t * 5 + phase_modulation(t)), 0]),
             t_range=[z_range[0], z_range[1], 0.1],
             color="#8B0000",
             stroke_width=4,
@@ -141,7 +125,7 @@ class GaussianBeamLenses(Scene):
             Create(bottom_beam),
             run_time=2,
         )
-
+        
         # Animate the creation of the single, continuous sine wave.
         self.play(Create(sine_function), run_time=3)
 
