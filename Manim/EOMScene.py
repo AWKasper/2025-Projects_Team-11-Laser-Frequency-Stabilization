@@ -1,55 +1,91 @@
 from manim import *
-from manim_physics import *
+import numpy as np
 
+class GaussianBeamLenses(Scene):
+    """
+    A Manim scene that visualizes a Gaussian beam propagating between two lenses.
+    The beam has its minimum waist exactly in the center of the optical system.
+    This version refactors lens creation into a function and uses a more compact layout.
+    """
 
-class AnimatedRayExampleScene(Scene):
+    # --- HELPER FUNCTION TO CREATE A LENS ---
+    # This function creates a biconvex lens VGroup, making the code cleaner.
+    def create_lens(self, lens_color=BLUE, fill_opacity=0.4):
+        """Creates a biconvex lens Mobject."""
+        p_top = [0, 0.8, 0]    # Top point of the lens
+        p_bottom = [0, -0.8, 0]  # Bottom point of the lens
+        # Right arc of the lens
+        arc1 = ArcBetweenPoints(p_top, p_bottom, angle=-PI / 2, color=lens_color)
+        # Left arc of the lens
+        arc2 = ArcBetweenPoints(p_top, p_bottom, angle=PI / 2, color=lens_color)
+        lens_shape = VGroup(arc1, arc2).set_fill(lens_color, opacity=fill_opacity)
+        return lens_shape
+
     def construct(self):
-        # Define the style for the lenses
-        lens_style = {"fill_opacity": 0.25, "color": BLUE, "stroke_width": 2}
 
-        # Create the two lenses
-        lens1 = Lens(-5, 1, **lens_style).shift(LEFT * 4)
-        lens2 = Lens(5, 1, **lens_style).shift(RIGHT * 4)
+        # --- BEAM PARAMETERS AND FUNCTION ---
+        # These parameters define the shape and divergence of the beam.
+        w0 = 0.1  # Beam waist (minimum radius) at z=0
+        zR = 3.0  # Rayleigh range (adjusted for the shorter distance)
 
-        # Instantly add the static lenses to the scene
-        self.add(lens1, lens2)
-
-        # --- Gaussian Beam Definition ---
-
-        # Parameters for the Gaussian beam
-        w0 = 0.1  # Beam waist (minimum radius)
-        zR = 8  # Rayleigh range (controls divergence)
-
-        # Function defining the beam waist w(z) along the propagation axis
+        # Function defining the beam radius w(z) along the propagation axis (z).
         def beam_waist(z):
             return w0 * np.sqrt(1 + (z / zR) ** 2)
 
-        # Create the top and bottom envelopes of the beam using ParametricFunction
-        # The function takes a parameter 't' (which we use as the z-axis)
-        # and returns a point [t, y(t), 0]
+        # --- OPTICAL ELEMENTS ---
+        # The new, shorter distance for the lenses and beam
+        distance = 4.0
+        
+        # A dashed line representing the central optical axis
+        center_line = DashedLine(
+            start=LEFT * (distance + 0.5), 
+            end=RIGHT * (distance + 0.5), 
+            color=WHITE, 
+            stroke_opacity=0.7
+        )
+
+        # Create lenses using the helper function
+        lens1 = self.create_lens().move_to(LEFT * distance)
+        lens2 = self.create_lens().move_to(RIGHT * distance)
+
+        # --- BEAM PROFILE ---
+        # The z-range over which the beam is drawn, matching the lens distance
+        z_range = [-distance, distance]
+        
+        # The top envelope of the beam
         top_beam = ParametricFunction(
             lambda z: [z, beam_waist(z), 0],
-            t_range=[-7, 7, 0.1],  # t_range is [start, end, step]
+            t_range=[z_range[0], z_range[1], 0.1],
             color=RED,
         )
-
+        # The bottom envelope of the beam
         bottom_beam = ParametricFunction(
             lambda z: [z, -beam_waist(z), 0],
-            t_range=[-7, 7, 0.1],
+            t_range=[z_range[0], z_range[1], 0.1],
             color=RED,
         )
-
-        # A center line for the beam
-        center_line = DashedLine(
-            start=LEFT * 7, end=RIGHT * 7, color=RED, stroke_opacity=0.5
+        
+        # Create a Polygon to fill the space between the top and bottom envelopes
+        beam_points_top = top_beam.get_points()
+        beam_points_bottom = bottom_beam.get_points()
+        beam_fill = Polygon(
+            *np.concatenate([beam_points_top, beam_points_bottom[::-1]]),
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.4
         )
 
+        # --- ANIMATION SEQUENCE ---
+        self.play(FadeIn(lens1, scale=0.8), FadeIn(lens2, scale=0.8))
+        
         # Animate the creation of the beam
-        # We use Create to draw the Mobjects from left to right
         self.play(
-            Create(top_beam, run_time=3),
-            Create(bottom_beam, run_time=3),
-            Create(center_line, run_time=3),
+            Create(center_line),
+            Create(top_beam),
+            Create(bottom_beam),
+            run_time=2
         )
+        self.play(FadeIn(beam_fill), run_time=1.5)
 
-        self.wait(1)  # Hold the final frame for a moment
+        # Hold the final scene
+        self.wait(3)

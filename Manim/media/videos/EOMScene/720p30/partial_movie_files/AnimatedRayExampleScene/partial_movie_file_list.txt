@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/AnimatedRayExampleScene/2016333726_2590414252_726015984.mp4'
-file 'file:C:/Users/abeka/Documents/school/PJNS1/Project-NS1-Laser-Frequency-Stabilization/Manim/media/videos/EOMScene/720p30/partial_movie_files/AnimatedRayExampleScene/543634251_2844360058_2448425632.mp4'
