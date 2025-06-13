@@ -17,6 +17,12 @@ Example:
 manim --quality m -p main.py CreateCircle
 ```
 
+To install ffmpeg
+```
+pip install ffmpeg-downloader
+ffdl install --add-path
+```
+
 # Team members:
  - Abe Kasper
  - Leo Willems
