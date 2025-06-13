@@ -73,7 +73,7 @@ class GaussianBeamLenses(Scene):
             fill_color=RED,
             fill_opacity=0.4
         )
-        
+
         # --- RECTANGLE (MARKS THE START OF THE MEDIUM) ---
         rectangle = Rectangle(
             color=DARK_BLUE,
@@ -95,15 +95,15 @@ class GaussianBeamLenses(Scene):
             # To ensure continuity, we subtract the value of the modulation
             # at the starting point, so it smoothly grows from zero.
             start_phase_offset = np.sin(rect_left_x * 50e6)
-            
+
             # Apply modulation only for t >= rect_left_x
-            return np.where(t >= rect_left_x, 
-                            np.sin(t * 5) - start_phase_offset, 
-                            0)
+            return np.where(t >= rect_left_x, np.sin(t * 5) - start_phase_offset, 0)
 
         # Create a single ParametricFunction for the entire sine wave.
         sine_function = ParametricFunction(
-            lambda t: np.array([t, beam_waist(t) * np.sin(t * 5 + phase_modulation(t)), 0]),
+            lambda t: np.array(
+                [t, beam_waist(t) * np.sin(t * 5 + phase_modulation(t)), 0]
+            ),
             t_range=[z_range[0], z_range[1], 0.1],
             color="#8B0000",
             stroke_width=4,
@@ -125,7 +125,7 @@ class GaussianBeamLenses(Scene):
             Create(bottom_beam),
             run_time=2,
         )
-        
+
         # Animate the creation of the single, continuous sine wave.
         self.play(Create(sine_function), run_time=3)
 
