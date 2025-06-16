@@ -7,7 +7,7 @@ class GaussianBeamLenses(Scene):
     A Manim scene that visualizes a Gaussian beam propagating between two lenses.
     The beam has its minimum waist exactly in the center of the optical system.
     This modified version shows the phase of the sine wave changing continuously
-    after it enters a region marked by a rectangle.
+    after it enters the EOM.
     """
 
     # This function creates a biconvex lens VGroup, making the code cleaner.
@@ -25,7 +25,6 @@ class GaussianBeamLenses(Scene):
 
     def construct(self):
         # --- BEAM PARAMETERS AND FUNCTION ---
-        # These parameters define the shape and divergence of the beam.
         w0 = 0.4  # Beam waist at z=0
         zR = 3.0  # Rayleigh range
 
@@ -89,15 +88,11 @@ class GaussianBeamLenses(Scene):
         rect_left_x = -rectangle.width / 2
 
         # Define the phase modulation function using np.where for vectorization.
-        # This function "turns on" the phase change at the boundary and continues it.
         def phase_modulation(t):
-            # The phase modulation starts at the left edge of the rectangle.
-            # To ensure continuity, we subtract the value of the modulation
-            # at the starting point, so it smoothly grows from zero.
-            start_phase_offset = np.sin(rect_left_x * 50e6)
+            start_phase_offset = np.sin(t * 22.848e6)
 
             # Apply modulation only for t >= rect_left_x
-            return np.where(t >= rect_left_x, np.sin(t * 5) - start_phase_offset, 0)
+            return np.where(t > rect_left_x, np.sin(t * 462e12) + start_phase_offset, 0)
 
         # Create a single ParametricFunction for the entire sine wave.
         sine_function = ParametricFunction(
@@ -110,24 +105,19 @@ class GaussianBeamLenses(Scene):
         )
 
         # --- ANIMATION SEQUENCE ---
-        # Fade in the optical elements
         self.play(
             FadeIn(lens1, scale=0.8),
             FadeIn(lens2, scale=0.8),
             FadeIn(rectangle, scale=0.8),
         )
 
-        # Animate the creation of the beam envelope
         self.play(
             Create(center_line),
-            FadeIn(beam_fill),
+            # FadeIn(beam_fill),
             Create(top_beam),
             Create(bottom_beam),
             run_time=2,
         )
 
-        # Animate the creation of the single, continuous sine wave.
         self.play(Create(sine_function), run_time=3)
-
-        # Hold the final scene for a moment
         self.wait(2)
