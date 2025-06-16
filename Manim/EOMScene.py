@@ -126,6 +126,7 @@ class GaussianBeamLenses(Scene):
         f_carrier_vis = 25
         # Visual frequency for the phase modulation
         f_mod_vis = 2
+        mod_amp = 0.1
 
         # Define the phase modulation function. It's active after the beam
         # enters the rectangle (Electro-Optic Modulator).
@@ -134,7 +135,7 @@ class GaussianBeamLenses(Scene):
             # np.where is a vectorized conditional:
             # if t > rect_left_x, apply modulation, else return 0.
             return np.where(
-                t > rect_left_x, 0.1 * np.sin(t * f_mod_vis) + start_phase_offset, 0
+                t > rect_left_x, mod_amp * np.sin(t * f_mod_vis) + start_phase_offset, 0
             )
 
         # Create a single ParametricFunction for the entire sine wave.
