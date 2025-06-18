@@ -9,7 +9,6 @@ Laser stabilisatie met de Pound-Drever-Hall techniek.
 -Results (Abe)
 -Discussion (Leo)
 
-
 # Rolverdeling:
 
 ## Abe
