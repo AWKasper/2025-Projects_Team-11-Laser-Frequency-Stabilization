@@ -89,4 +89,4 @@ class Spiegels(Scene):
         # Animate beam growth
         self.play(beam_end.animate.set_value(3.5), run_time=3, rate_func=linear)
 
-        self.wait()
+        self.wait(3)

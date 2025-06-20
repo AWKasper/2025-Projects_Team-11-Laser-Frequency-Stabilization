@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/CavityScene/1080p60/partial_movie_files/MaakLens/3977891868_1570802739_223132457.mp4'
-file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/CavityScene/1080p60/partial_movie_files/MaakLens/2852726489_780035246_3572715825.mp4'
