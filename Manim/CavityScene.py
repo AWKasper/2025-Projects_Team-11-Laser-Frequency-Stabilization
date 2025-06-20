@@ -36,12 +36,17 @@ class Spiegels(Scene):
         standing_wave = always_redraw(lambda: ParametricFunction(
             lambda z: [z, 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * z) * np.cos(8 * t.get_value()), 0], # Thanks naar Abe voor deze lambda functie
             t_range=(-6, 6),
-            color=WHITE,
+            color=GREEN,
             use_vectorized=True
         ))
+
+        exit_wave = always_redraw(lambda: ParametricFunction(lambda z: [z,0.1*np.sqrt(37)*np.abs(np.cos(4*t.get_value()))*np.sin(5*z),0],t_range=(6+0.1,8),color=WHITE,use_vectorized=True))
+
+
 
         self.play(Create(un), Create(un2), run_time=1)
         self.play(Create(waist_top), Create(waist_bottom))
         self.play(Create(wave))
         self.add(standing_wave)
+        self.add(exit_wave)
         self.play(t.animate.increment_value(2 * np.pi), run_time=20, rate_func=linear)
