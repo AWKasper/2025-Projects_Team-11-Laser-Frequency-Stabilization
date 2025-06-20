@@ -17,6 +17,12 @@ Example:
 manim --quality m -p main.py CreateCircle
 ```
 
+To install Miktex for latex stuff
+
+```
+https://miktex.org/download
+```
+
 To install ffmpeg
 ```
 pip install ffmpeg-downloader
