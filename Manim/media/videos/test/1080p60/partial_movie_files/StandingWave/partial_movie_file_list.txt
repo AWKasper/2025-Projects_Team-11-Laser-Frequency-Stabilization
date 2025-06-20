@@ -1,0 +1,5 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/test/1080p60/partial_movie_files/StandingWave/3977891868_3796194123_223132457.mp4'
+file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/test/1080p60/partial_movie_files/StandingWave/2852726489_2632471276_1977941906.mp4'
+file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/test/1080p60/partial_movie_files/StandingWave/2852726489_4094922135_3981915983.mp4'
+file 'file:C:/Users/ricok/Documents/git_project/2025-Projects_Team-11-Laser-Frequency-Stabilization/Manim/media/videos/test/1080p60/partial_movie_files/StandingWave/2852726489_634017564_75748762.mp4'

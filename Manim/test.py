@@ -1,4 +1,5 @@
 from manim import *
+from manim_physics import *
 import numpy as np
 
 mirror_curvature = 4
@@ -33,19 +34,24 @@ class Spiegels(Scene):
         # tijdsafhankelijke vorm van de sinus (ValueTracker houdt de tijd bij)
         t = ValueTracker(0)
         standing_wave = always_redraw(lambda: ParametricFunction(
-            lambda z: [z, 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * z) * np.cos(8 * t.get_value()), 0], # Thanks naar Abe voor deze lambda functie
+            lambda z: [z, t.get_value()*0.05 * np.sqrt(1 + z ** 2) * np.sin(5 * z) * np.cos(8 * t.get_value()), 0], # Thanks naar Abe voor deze lambda functie
             t_range=(-6, 6),
-            color=GREEN,
+            color=WHITE,
             use_vectorized=True
         ))
-
-        exit_wave = always_redraw(lambda: ParametricFunction(lambda z: [z,0.1*np.sqrt(37)*np.abs(np.cos(4*t.get_value()))*np.sin(5*z),0],t_range=(6+0.1,8),color=WHITE,use_vectorized=True))
-
-
 
         self.play(Create(un), Create(un2), run_time=1)
         self.play(Create(waist_top), Create(waist_bottom))
         self.play(Create(wave))
+        self.play(FadeOut(wave))
         self.add(standing_wave)
-        self.add(exit_wave)
+        self.play(FadeOut(waist_top),FadeOut(waist_bottom))
         self.play(t.animate.increment_value(2 * np.pi), run_time=20, rate_func=linear)
+
+        # loops = 10
+        # for i in range(loops):
+        #     wave_r1 = ParametricFunction(lambda z: [(-z), 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * (-z)), 0], t_range=(-6, 6), color=GREEN)
+        #     wave_r2 = ParametricFunction(lambda z: [(z), 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * (z)), 0], t_range=(-6, 6), color=BLUE)
+        #     self.play(Create(wave_r1))
+        #     self.play(Create(wave_r2))
+
