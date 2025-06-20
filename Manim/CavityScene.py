@@ -1,5 +1,4 @@
 from manim import *
-from manim_physics import *
 import numpy as np
 
 mirror_curvature = 4
