@@ -45,5 +45,3 @@ class Spiegels(Scene):
         self.play(Create(wave))
         self.add(standing_wave)
         self.play(t.animate.increment_value(2 * np.pi), run_time=20, rate_func=linear)
-
-
