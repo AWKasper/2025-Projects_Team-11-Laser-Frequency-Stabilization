@@ -46,10 +46,4 @@ class Spiegels(Scene):
         self.add(standing_wave)
         self.play(t.animate.increment_value(2 * np.pi), run_time=20, rate_func=linear)
 
-        # loops = 10
-        # for i in range(loops):
-        #     wave_r1 = ParametricFunction(lambda z: [(-z), 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * (-z)), 0], t_range=(-6, 6), color=GREEN)
-        #     wave_r2 = ParametricFunction(lambda z: [(z), 0.1 * np.sqrt(1 + z ** 2) * np.sin(5 * (z)), 0], t_range=(-6, 6), color=BLUE)
-        #     self.play(Create(wave_r1))
-        #     self.play(Create(wave_r2))
 
