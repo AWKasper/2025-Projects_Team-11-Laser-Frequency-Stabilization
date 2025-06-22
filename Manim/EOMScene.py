@@ -8,6 +8,7 @@ class GaussianBeamLenses(Scene):
     The beam has its minimum waist exactly in the center of the optical system.
     This modified version shows the phase of the sine wave changing continuously
     after it enters an Electro-Optic Modulator (EOM), represented by the rectangle.
+    A formula for phase modulation is displayed above the EOM.
     """
 
     # This function creates a biconvex lens VGroup, making the code cleaner.
@@ -102,11 +103,20 @@ class GaussianBeamLenses(Scene):
         )
         rectangle.move_to(ORIGIN)
 
-        # --- EOM LABEL ---
+        # --- EOM LABEL AND FORMULA ---
         # Create a text mobject for the label "E.O.M."
         eom_label = Tex("E.O.M.", color=WHITE).scale(0.7)
         # Position the label just below the top edge of the rectangle, centered.
         eom_label.next_to(rectangle.get_top(), DOWN, buff=0.3)
+
+        # Create a MathTex mobject for the phase modulation formula.
+        # This represents the carrier wave (frequency \omega_c) being modulated
+        # by another sine wave (frequency \omega_m).
+        formula = MathTex(
+            r"y(t) \propto \sin(\omega_c t + \delta \sin(\omega_m t))", color=WHITE
+        ).scale(0.8)
+        # Position the formula above the EOM rectangle.
+        formula.next_to(rectangle, UP, buff=0.5)
 
         # --- CONTINUOUS SINE WAVE (IN ONE PART) ---
         # Define the boundary where the phase modulation begins
@@ -158,8 +168,9 @@ class GaussianBeamLenses(Scene):
             FadeIn(lens1, scale=0.8),
             FadeIn(lens2, scale=0.8),
             FadeIn(rectangle, scale=0.8),
-            # Fade in the new label with the other elements
+            # Fade in the labels with the other elements
             FadeIn(eom_label),
+            Write(formula),  # Animate the formula writing itself out
         )
 
         self.play(
@@ -170,5 +181,5 @@ class GaussianBeamLenses(Scene):
             run_time=2,
         )
 
-        self.play(Create(sine_function), run_time=6)
+        self.play(Create(sine_function), run_time=12)
         self.wait(3)
