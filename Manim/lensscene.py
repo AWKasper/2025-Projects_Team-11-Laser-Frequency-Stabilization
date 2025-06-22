@@ -8,6 +8,9 @@ mirror_width = 1.5
 def beam(z):
     return 0.1 * np.sqrt(1 + (z / 1) ** 2)
 
+def beam_2(z):
+    return 0.05 * np.sqrt(1 + (z / 0.45) ** 2)
+
 class Spiegels(Scene):
       
     def construct(self):
@@ -63,30 +66,44 @@ class Spiegels(Scene):
         # Beam tracker
         beam_end = ValueTracker(-10)
 
-        waist_top = always_redraw(lambda: ParametricFunction(
+          
+
+        waist_top_1 = always_redraw(lambda: ParametricFunction(
             lambda z: [z, beam(z), 0],
             t_range=(-6, beam_end.get_value()),
             color=RED
         ))
 
-        waist_bottom = always_redraw(lambda: ParametricFunction(
+        waist_bottom_1 = always_redraw(lambda: ParametricFunction(
             lambda z: [z, -beam(z), 0],
             t_range=(-6, beam_end.get_value()),
             color=RED
         ))
 
+        waist_bottom_2 = always_redraw(lambda: ParametricFunction(
+            lambda z: [z, -beam_2(z), 0],
+            t_range=(-3.5, 3.5),
+            color=GREEN
+        ))
+
+        waist_top_2 = always_redraw(lambda: ParametricFunction(
+            lambda z: [z, beam_2(z), 0],
+            t_range=(-3.5, 3.5),
+            color=GREEN
+        ))
+
         # Group all visual components
-        full_group = VGroup(un, un2, waist_top, waist_bottom)
+        full_group = VGroup(un, un2, waist_top_1, waist_bottom_1)
         full_group.scale(0.6)  # 🔍 Scale down entire animation (adjust factor if needed)
 
         # Play mirror appearance
-        self.play(FadeIn(un, scale=0.6), FadeIn(un2, scale=0.6), FadeIn(lens, scale=0.6))
-        self.add(waist_top, waist_bottom)
-
-        # Apply scale after elements are added
-        self.add(full_group)
+        self.play(FadeIn(lens, scale=0.6))
+        self.add(waist_top_1, waist_bottom_1)
 
         # Animate beam growth
-        self.play(beam_end.animate.set_value(3.5), run_time=3, rate_func=linear)
-
-        self.wait()
+        self.play(beam_end.animate.set_value(3.5), run_time=10, rate_func=linear)
+        self.play(FadeIn(un, scale=0.6), FadeIn(un2, scale=0.6))
+        self.wait(2)
+        self.play(FadeIn(waist_bottom_2, waist_top_2))
+        self.wait(10)
+        
