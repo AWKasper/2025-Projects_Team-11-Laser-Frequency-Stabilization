@@ -1,6 +1,9 @@
 # Project-NS1-Laser-Frequency-Stabilization
 Omgeving voor Laser Frequency Stabilization voor Project Natuur- &amp; Sterrenkunde
 
+# Labjournaal:
+[Labjournaal](https://amsuni-my.sharepoint.com/:o:/r/personal/rico_koster_student_uva_nl/Documents/Project%201/Labjournaal_Groep-11_Laser_Frequency_Stabilisation?d=w799ab93af52142d3a55480e23ed9f892&csf=1&web=1&e=nx8dph)
+
 # Render animations
 For preview run following commands from Manim folder (cd Manim):
 ```
